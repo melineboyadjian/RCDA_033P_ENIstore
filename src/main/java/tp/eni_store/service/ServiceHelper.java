@@ -8,11 +8,12 @@ public class ServiceHelper {
      * @return
      * @param <T>
      */
-    static <T> ServiceResponse<T> buildResponse(int code, T data){
+    static <T> ServiceResponse<T> buildResponse(int code, T data, String message){
         ServiceResponse<T> serviceResponse = new ServiceResponse<T>();
 
         serviceResponse.code = code;
         serviceResponse. data = data;
+        serviceResponse.message = message;
 
         System.out.println(String.format("Service response : code=%s", code));
 
@@ -20,6 +21,6 @@ public class ServiceHelper {
     }
 
     static <T> ServiceResponse<T> buildResponse(int code){
-        return buildResponse(code, null);
+        return buildResponse(code, null, null);
     }
 }
