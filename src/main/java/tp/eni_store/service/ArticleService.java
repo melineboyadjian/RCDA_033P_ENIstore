@@ -4,23 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import tp.eni_store.bo.Article;
-import tp.eni_store.dao.DAOArticle;
+import tp.eni_store.dao.IDAOArticle;
+import tp.eni_store.dao.mock.DAOArticleMock;
 import tp.eni_store.dao.DAOSaveResult;
 import tp.eni_store.locale.LocaleHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ArticleService {
-    @Autowired
-    private DAOArticle daoArticle;
 
-    @Autowired
-    MessageSource messageSource;
+    private final IDAOArticle daoArticle;
+    final MessageSource messageSource;
+    final LocaleHelper localeHelper;
 
-    @Autowired
-    LocaleHelper localeHelper;
+    public ArticleService(IDAOArticle daoArticle, MessageSource messageSource, LocaleHelper localeHelper) {
+        this.daoArticle = daoArticle;
+        this.messageSource = messageSource;
+        this.localeHelper = localeHelper;
+    }
+
 
     public ServiceResponse<List<Article>> findAll() {
         /*ServiceResponse<List<Article>> serviceResponse = new ServiceResponse<>();
@@ -30,7 +33,7 @@ public class ArticleService {
         return ServiceHelper.buildResponse(202, daoArticle.getAll(), localeHelper.i18n("findAllArticle_202_Success"));
     }
 
-    public ServiceResponse<Article> findById(int id) {
+    public ServiceResponse<Article> findById(String id) {
         Article article = daoArticle.getById(id);
 
         // Cas : Je trouve pas l'id
@@ -42,7 +45,7 @@ public class ArticleService {
         return ServiceHelper.buildResponse(202, article, localeHelper.i18n("findArticle_202_Success"));
     }
 
-    public ServiceResponse delete(int id) {
+    public ServiceResponse delete(String id) {
         boolean removeSuccess = daoArticle.delete(id);
 
         ServiceResponse serviceResponse = new ServiceResponse();
